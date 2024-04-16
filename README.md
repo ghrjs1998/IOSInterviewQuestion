@@ -493,3 +493,46 @@ nil 병함 연산자(??)는 옵셔널 값이 nil인 경우에 대비해 기본�
 이처럼 nil 병합 연산자를 사용해 옵셔널 값이 nil일 때 대비해 기본값을 제공할 수 O.
 <br />
 <br />
+
+> 6. iOS 앱의 생명주기(App Life Cycle)에 대해 설명해주세요. <br />
+
+iOS 앱의 생명 주기는 앱이 시작되고 종료될 때까지의 상태 변화를 의미. 주로 앱이 Not Running 상태에서 시작해 Active, Inactive, Background, Suspended 상태로 전환된다. 앱이 시작되면 Not Running 상태에서 Active 상태로 전환된다. 이때 앱이 화면에 나타나고 사용자의 상호작용을 받을 수 O. 사용자가 앱을 홈 버튼으로 나가거나 다른 앱으로 전환되면, 앱은 Inactive 상태로 전환되며, 이때는 이벤트를 받지 않은 상태. 백그라운드로 전환될 때는 Background 상태로 이동한다. 이 상태에서는 앱이 화면에는 표시되지 않지만 백그라운드에서 실행되는 작업들을 처리할 수 O. 예를 들어, 음악 앱은 백그라운드에서 음악을 계속 재생할 수 O. 마지막으로 앱이 종료되거나 시스템이 자원을 관리하기 위해 일시 중단될 때는 Suspended 상태로 전환된다. 이떄는 앱이 메모리에 남아 있지만 실행이 중단되며, 다시 실행될 때 이전 상태에서 이어서 작업을 수행할 수 O. 앱의 생명주기를 이해하면 사용자 경험을 개선하고 앱의 성능을 최적화하는데 도움이 된다.
+<br />
+<br />
+
+> 7. 앱의 각 상태(Not Running, Inactive, Active, Background, Suspended)에서 할 수 있는 작업은 무엇인가요? <br />
+
+1. Not Running: 앱이 실행되지 않은 상태. 이 상태에서는 아무런 작업도 수행할 수 X. 사용자가 앱을 실행하지 않았거나 시스템이 앱을 종료한 경우
+2. Inactive: 앱이 실행 중이지만 이벤트를 받지 않고 있는 상태. 주로 앱이 화면 전환 중이거나 다른 이벤트를 처리하는 동안에 있다. 사용자의 입력을 받지 않으므로 주로 대기 상태에 있다. 
+3. Active: 앱이 화면에 표시되고 사용자의 이벤트를 수신하고 있는 상태. 이 상태에서는 앱이 사용자와 상호작용하고 있으며, 사용자 입력에 따라 작업을 수행한다. 예를 들어, 화면을 탭하거나 버튼을 클릭하는 등의 작업이 가능.
+4. Background: 앱이 백그라운드에서 실행되고 있지만, 화면에는 표시되지 않는 상태. 이 상태에서는 주로 백그라운드 작업을 수해한다. 예를 들어, 음악 재생, 위치 추적, 네트워크 작업 등이 백그라운드에서 실행될 수 O.
+5. Suspended: 앱이 백그라운드에 있지만 실행이 일시 중단된 상태. 시스템이 자원을 관리하기 위해 앱을 일시 중단할 수 O. 이 상태에서는 앱이 메모리에는 남아 있지만 코드가 실행되지 X. 사용자가 다시 앱을 실행하면 이전 상태에서 계속된다.
+<br />
+<br />
+
+> 8. 앱 상태 변화에 따라 호출되는 AppDelegate 메서드들을 나열해주세요. <br />
+
+1. 앱이 시작될 때:
+   * application(_ : willFinishLaunchingWithOptions:): 앱이 실행되고 초기화가 완료되기 직전에 호출된다. 이 시점에서의 앱의 상태는 Not Running
+   * application(_ : didFinishLaunchingWithOptions:): 앱이 실행되고 초기화가 완료된 후에 호출된다. 이 시점에서 앱의 상태는 Active
+2. 앱이 포그라운드로 전환될 때:
+   * applicationWillEnterForeground(_ :): 앱이 포그라운드로 전환되기 직전에 호출된다. 이 시점에서 앱의 상태는 Inactive or Background.
+   * applicationDidBecomeActive(_ :): 앱이 포그라운드로 전환된 후에 호출된다. 이 시점에서 앱의 상태는 Background.
+3. 앱이 백그라운드로 전환될 때:
+   * applicationDidEnterBackground(_ :): 앱이 백그라운드로 전환된 후에 호출된다. 이 시점에서 앱의 상태는 Background.
+4. 앱이 종료될 때:
+   * applicationWillTerminate(_ :): 앱이 종료되기 직전에 호출된다. 이 시점에서 앱의 상태는 Active 또는 Background. 종료되는 이유가 시스템이나 사용자에 의한 것인지에 따라 달라짐
+5. 앱이 일시 중단될 때:
+   * applicationDidEnterBackground(_ :): 앱이 백그라운드로 전환될 때 호출되며, 이때 앱의 상태가 Suspended로 변할 때도 호출된다. Suspended 상태로 진입하 때 앱이 백그라운드에서 실행되는 마지막 코드를 처리할 수 O.
+<br />
+<br />
+
+> 9. 백그라운드에서 작업을 완료하기 위한 방법들은 무엇이 있나요? <br />
+
+1. Background Modes 설정: iOS 앱은 백그라운드에서 실행되는 여러 가지 작업을 처리하기 위한 다양한 Background Modes를 설정할 수 O. 예를 들어, 음악 재생, 위치 업데이트, 백그라운드에서 데이터 수신 등의 작업을 처리할 수 O. 이를 위해 Xcode의 프로젝트 설정에서 Background Modes를 활성화하고 필요한 모드를 선택해 설정할 수 O.
+2. Background Tasks: 앱이 백그라운드로 전환될 때 실행되는 작업을 완료하기 위해 백그라운드 테스크를 사용할 수 O. 백그라운드 테스크는 beginBackgroundTask(withName: expirationHandler:)메서드를 사용해 시작하고, 작업이 완료한 후에는 endBackgroundTask(_ :)메서드를 호출해 종료한다. 이를 통해 백그라운드에서 지정된 시간 동안 작업을 수행할 수 O.
+3. Background App Refresh: 앱이 백그라운드에서 주기적으로 데이터를 업데이트하거나 작업을 수해해야 하는 경우, Background App Refresh를 사용할 수 O. 이를 통해 iOS는 앱을 백그라운드에서 주기적으로 실행해 필요한 작업을 수행할 수 O. Background App Refresh를 활성화 하려면 Info.plist 파일에 UIBackgroundModes 키에 fetch 값을 추가
+4. Background URLSession: 네트워크 작업을 백그라운드에서 처리해야 하는 경우, Background URLSession을 사용할 수 O. 이를 통해 백그라운드에서 네트워크 요청을 보내고 데이터를 다운로드할 수 O. 백그라운드 URLSession은 앱의 Background Modes 설정에서 Background Fetch 또는 Background Processing을 활성화해야 함
+5. 로컬 알림 사용: 백그라운드에서 작업을 완료하기 위한 다른 방법으로는 로컬 알림을 사용하는 것. 작업이 완료되면 앱이 백그라운드에서 사용저에게 알림을 보내 작업을 완료했음을 알릴 수 O.
+<br />
+<br />
